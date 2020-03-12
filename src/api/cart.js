@@ -95,6 +95,14 @@ export default class extends Base {
                 response,
             };
 
+            console.log('itemAdd --- err: ', err);
+            console.log('itemAdd --- response: ', response);
+
+            if (response.data.error && response.data.errorType) {
+                response.data.error = response.data.errorType === 'invalid.item.quantity'
+                    ? 'Оопс, что то пошло не так' : response.error;
+            }
+
             Hooks.emit('cart-item-add-remote', emitData);
             callback(err, response);
         });
@@ -129,6 +137,15 @@ export default class extends Base {
                 err,
                 response,
             };
+
+            console.log('itemUpdate --- items: ', items);
+            console.log('itemUpdate --- err: ', err);
+            console.log('itemUpdate --- response: ', response);
+
+            if (response.error && response.errorType) {
+                response.error = response.errorType === 'invalid.item.quantity'
+                    ? 'Оопс, что то пошло не так' : response.error;
+            }
 
             Hooks.emit('cart-item-update-remote', emitData);
             callbackArg(err, response);
